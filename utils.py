@@ -1,6 +1,6 @@
 from __future__ import division,print_function
 import math, os, json, sys, re
-import pickle #import cPickle as pickle
+import pickle
 from glob import glob
 import numpy as np
 from matplotlib import pyplot as plt
@@ -39,12 +39,10 @@ from keras.models import Sequential, Model
 from keras.layers import Input, Embedding, Reshape, merge, LSTM, Bidirectional
 from keras.layers import TimeDistributed, Activation, SimpleRNN, GRU
 from keras.layers.core import Flatten, Dense, Dropout, Lambda
-#from keras.regularizers import l2, activity_l2, l1, activity_l1
-from keras.regularizers import l2, l1
+from keras.regularizers import l2, activity_l2, l1, activity_l1
 from keras.layers.normalization import BatchNormalization
 from keras.optimizers import SGD, RMSprop, Adam
-#from keras.utils.layer_utils import layer_from_config
-from keras.layers import deserialize as layer_from_config
+from keras.utils.layer_utils import layer_from_config
 from keras.metrics import categorical_crossentropy, categorical_accuracy
 from keras.layers.convolutional import *
 from keras.preprocessing import image, sequence
@@ -84,8 +82,9 @@ def plots(ims, figsize=(12,6), rows=1, interp=False, titles=None):
         if (ims.shape[-1] != 3):
             ims = ims.transpose((0,2,3,1))
     f = plt.figure(figsize=figsize)
+    cols = len(ims)//rows if len(ims) % 2 == 0 else len(ims)//rows + 1
     for i in range(len(ims)):
-        sp = f.add_subplot(rows, len(ims)//rows, i+1)
+        sp = f.add_subplot(rows, cols, i+1)
         sp.axis('Off')
         if titles is not None:
             sp.set_title(titles[i], fontsize=16)
@@ -178,10 +177,6 @@ def save_array(fname, arr):
     c=bcolz.carray(arr, rootdir=fname, mode='w')
     c.flush()
 
-def create_dirc(directory):
-    if not os.path.exists(directory):
-        os.makedirs(directory)
-    
 
 def load_array(fname):
     return bcolz.open(fname)[:]
@@ -266,4 +261,7 @@ class MixIterator(object):
             n0 = np.concatenate([n[0] for n in nexts])
             n1 = np.concatenate([n[1] for n in nexts])
             return (n0, n1)
-        
+
+def create_dirc(directory):
+    if not os.path.exists(directory):
+        os.makedirs(directory)
