@@ -52,8 +52,11 @@ from vgg16 import *
 from vgg16bn import *
 np.set_printoptions(precision=4, linewidth=100)
 
-
 to_bw = np.array([0.299, 0.587, 0.114])
+
+def create_dir(directory):
+    if not os.path.exists(directory):
+        os.makedirs(directory)
 
 def gray(img):
     if K.image_dim_ordering() == 'tf':
@@ -261,7 +264,3 @@ class MixIterator(object):
             n0 = np.concatenate([n[0] for n in nexts])
             n1 = np.concatenate([n[1] for n in nexts])
             return (n0, n1)
-
-def create_dirc(directory):
-    if not os.path.exists(directory):
-        os.makedirs(directory)
